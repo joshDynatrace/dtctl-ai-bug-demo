@@ -1,0 +1,82 @@
+[
+  {
+    "objectId": "vu9U3hXa3q0AAAABACNidWlsdGluOm9wZW5waXBlbGluZS5sb2dzLnBpcGVsaW5lcwAGdGVuYW50AAZ0ZW5hbnQAJGI2N2NhYmU4LThlNGItM2I5Yy1iOWVhLTllZDUxYzMyMGU3Y77vVN4V2t6t",
+    "schemaId": "builtin:openpipeline.logs.pipelines",
+    "schemaVersion": "1.65",
+    "value": {
+      "metadataList": [],
+      "customId": "pipeline_Arc_Backend_Exception_3168",
+      "displayName": "Arc Backend Exception",
+      "processing": {
+        "processors": [
+          {
+            "id": "processor_Arc_Backend_Exception_4819",
+            "type": "dql",
+            "matcher": "matchesPhrase(k8s.container.name, \"arc-backend\")\nand\nmatchesPhrase(content, \"NullPointerException\")",
+            "description": "Arc Backend Exception",
+            "sampleData": "{\n  \"k8s.container.name\": \"arc-backend\",\n  \"content\": \"NullPointerException\"\n}",
+            "enabled": true,
+            "dql": {
+              "script": "fieldsAdd alertme = \"true\""
+            }
+          }
+        ]
+      },
+      "securityContext": {
+        "processors": []
+      },
+      "costAllocation": {
+        "processors": []
+      },
+      "productAllocation": {
+        "processors": []
+      },
+      "storage": {
+        "processors": []
+      },
+      "smartscapeNodeExtraction": {
+        "processors": []
+      },
+      "smartscapeEdgeExtraction": {
+        "processors": []
+      },
+      "metricExtraction": {
+        "processors": []
+      },
+      "davis": {
+        "processors": [
+          {
+            "id": "processor_Send_NullPointerException_5352",
+            "type": "davis",
+            "matcher": "alertme == \"true\"",
+            "description": "Send NullPointerException",
+            "enabled": true,
+            "davis": {
+              "properties": [
+                {
+                  "key": "event.type",
+                  "value": "ERROR_EVENT"
+                },
+                {
+                  "key": "event.name",
+                  "value": "java.lang.NullPointerException"
+                },
+                {
+                  "key": "event.description",
+                  "value": "A NullPointerException has been thrown in the arc-backend service"
+                },
+                {
+                  "key": "dt.source_entity",
+                  "value": "{dt.source_entity}"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "dataExtraction": {
+        "processors": []
+      }
+    }
+  }
+]
