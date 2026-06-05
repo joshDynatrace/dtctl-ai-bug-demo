@@ -21,7 +21,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 OUTPUT_DIR = SCRIPT_DIR / "investigation_output"
 DEFAULT_MODEL = "claude-sonnet-4-6"
 # Maximum number of agentic turns before the SDK forcibly stops the session.
-MAX_TURNS = 70
+MAX_TURNS = 100
 
 
 def _env_flag(name, default=False):
