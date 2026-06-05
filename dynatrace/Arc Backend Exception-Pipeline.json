@@ -8,19 +8,7 @@
       "customId": "pipeline_Arc_Backend_Exception_3168",
       "displayName": "Arc Backend Exception",
       "processing": {
-        "processors": [
-          {
-            "id": "processor_Arc_Backend_Exception_4819",
-            "type": "dql",
-            "matcher": "matchesPhrase(k8s.container.name, \"arc-backend\")\nand\nmatchesPhrase(content, \"NullPointerException\")",
-            "description": "Arc Backend Exception",
-            "sampleData": "{\n  \"k8s.container.name\": \"arc-backend\",\n  \"content\": \"NullPointerException\"\n}",
-            "enabled": true,
-            "dql": {
-              "script": "fieldsAdd alertme = \"true\""
-            }
-          }
-        ]
+        "processors": []
       },
       "securityContext": {
         "processors": []
@@ -48,8 +36,8 @@
           {
             "id": "processor_Send_NullPointerException_5352",
             "type": "davis",
-            "matcher": "alertme == \"true\"",
-            "description": "Send NullPointerException",
+            "matcher": "matchesPhrase(k8s.container.name, \"arc-backend\")\nand\nmatchesPhrase(content, \"*Exception\")",
+            "description": "Send Exception Event",
             "enabled": true,
             "davis": {
               "properties": [
@@ -59,15 +47,19 @@
                 },
                 {
                   "key": "event.name",
-                  "value": "java.lang.NullPointerException"
+                  "value": "Arc Backend Exception Thrown"
                 },
                 {
                   "key": "event.description",
-                  "value": "A NullPointerException has been thrown in the arc-backend service"
+                  "value": "Exception in arc-backend pod {k8s.pod.name}: {content}"
                 },
                 {
                   "key": "dt.source_entity",
                   "value": "{dt.source_entity}"
+                },
+                {
+                  "key": "log.content",
+                  "value": "{content}"
                 }
               ]
             }
