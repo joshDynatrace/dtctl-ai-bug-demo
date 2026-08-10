@@ -32,7 +32,7 @@ Here are some short quickstart details to get going as you spin up the codespace
 
 Let's Get Started...
 
-## [🛒 🤖 Start the AI bug investigation here!](https://joshdynatrace.github.io/dtctl-ai-bug-demo/)
+## [🛒 🤖 Start the AI bug investigation here!](https://dynatrace.github.io/dtctl-ai-bug-demo/)
 
 
 More details about the project are below including how to build and run the Arc Store locally.
@@ -143,4 +143,4 @@ mkdocs gh-deploy
 
 ---
 
-## [🛒🤖 Start the AI bug investigation here!](https://joshdynatrace.github.io/dtctl-ai-bug-demo/)
+## [🛒🤖 Start the AI bug investigation here!](https://dynatrace.github.io/dtctl-ai-bug-demo/)
