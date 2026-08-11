@@ -8,7 +8,7 @@ A demo e-commerce store with a React frontend, Spring Boot backend, a Python loa
 
 Here are some short quickstart details to get going as you spin up the codespaces. More specific details are in the link at the bottom of the page.
 
-1) To spin up the environment with GitHub Codespaces, go to **Code > Codespaces > New with options**, or directly by [clicking here](https://codespaces.new/joshdynatrace/dtctl-ai-bug-demo).
+1) To spin up the environment with GitHub Codespaces, go to **Code > Codespaces > New with options**.
 
    > **Recommended:** 4-core machine (16 GB RAM) — the Kind cluster runs the full Arc Store stack inside the codespace.
 
