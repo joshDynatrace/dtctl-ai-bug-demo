@@ -59,6 +59,8 @@ class FixPlan:
     code_changes: list = field(default_factory=list)
     pr_url: Optional[str] = None
     pr_number: Optional[int] = None
+    pr_title: Optional[str] = None
+    pr_body_markdown: Optional[str] = None
     branch: Optional[str] = None
     ok: bool = True
     error: str = ""
@@ -73,6 +75,8 @@ class FixPlan:
             code_changes=data.get("code_changes", []),
             pr_url=data.get("pr_url"),
             pr_number=data.get("pr_number"),
+            pr_title=data.get("pr_title"),
+            pr_body_markdown=data.get("pr_body_markdown"),
             branch=data.get("branch"),
         )
 
@@ -120,13 +124,13 @@ def build_agent_prompt(issue_ctx: IssueContext, investigation_state: dict, auto_
 
     if auto_pr:
         pr_instructions = (
-            f"After finalizing the root cause and fix, you MUST create a pull request:\n"
+            f"After finalizing the root cause and fix, you MUST push your changes to GitHub:\n"
             f"1. Create a new branch named: agent/fix-{issue_ctx.issue_number}\n"
             f"2. Make the necessary code changes based on your analysis\n"
             f"3. Commit the changes with a descriptive message including the root cause\n"
             f"4. Push the branch to GitHub\n"
-            f"5. Create a PR with the fix plan summary in the description\n"
-            f"Include the PR URL, branch name, and PR number in your final response."
+            f"Do NOT attempt to create a pull request — the orchestrator will handle PR creation automatically.\n"
+            f"Include the branch name, pr_title, and pr_body_markdown in your final JSON response."
         )
     else:
         pr_instructions = "PR creation is disabled (AUTO_PR not set)."
