@@ -31,8 +31,9 @@ RUN curl -sSL -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernete
 # Install Helm
 RUN curl -s https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash -
 
-# Install kind (pinned to avoid unauthenticated GitHub API rate limits)
-RUN curl -sSL -o /usr/local/bin/kind https://kind.sigs.k8s.io/dl/v0.32.0/kind-linux-amd64 \
+# Install kind
+RUN KIND_RELEASE=$(curl --silent "https://api.github.com/repos/kubernetes-sigs/kind/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/') \
+    && curl -sSL -o /usr/local/bin/kind https://kind.sigs.k8s.io/dl/$KIND_RELEASE/kind-linux-amd64 \
     && chmod +x /usr/local/bin/kind
 
 RUN /tmp/scripts/docker.sh
