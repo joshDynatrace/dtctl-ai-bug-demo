@@ -37,6 +37,11 @@ public class OrderService {
 
         // Call TaxService to get the tax rate for the product and shipping state
         TaxRateResponse taxResponse = taxService.getTaxRate(product.getTaxCode(), shippingState);
+        if (taxResponse == null || taxResponse.getTaxRate() == null) {
+            throw new IllegalStateException(
+                "Tax service returned a null tax rate for taxCode=" + product.getTaxCode() +
+                ", state=" + shippingState + ". Cannot compute tax preview.");
+        }
         double taxRate = taxResponse.getTaxRate();
         BigDecimal taxAmount = subtotal.multiply(BigDecimal.valueOf(taxRate));
         BigDecimal total = subtotal.add(taxAmount);
