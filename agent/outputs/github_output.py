@@ -5,6 +5,35 @@ import requests
 from pipeline import FixPlan, IssueContext
 
 
+def create_pull_request(issue_ctx: IssueContext, fix_plan: FixPlan) -> dict:
+    token = os.getenv("GITHUB_TOKEN")
+    if not issue_ctx.repo or not token or not fix_plan.branch:
+        return {"status": "skipped", "reason": "missing repo, token, or branch"}
+
+    title = fix_plan.pr_title or f"fix: agent investigation fix for issue #{issue_ctx.issue_number}"
+    body = fix_plan.pr_body_markdown or (
+        f"Automated fix by AI agent for issue #{issue_ctx.issue_number}.\n\n"
+        f"**Root cause:** {fix_plan.root_cause}\n\n"
+        f"**Confidence:** {fix_plan.confidence}"
+    )
+    url = f"https://api.github.com/repos/{issue_ctx.repo}/pulls"
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+    }
+    payload = {"title": title, "body": body, "head": fix_plan.branch, "base": "main"}
+    response = requests.post(url, headers=headers, json=payload, timeout=30)
+    data = response.json() if response.content else {}
+    return {
+        "status": response.status_code,
+        "pr_url": data.get("html_url"),
+        "pr_number": data.get("number"),
+        "branch": fix_plan.branch,
+        "response": response.text[:500],
+    }
+
+
 def post_issue_comment(issue_ctx: IssueContext, body: str) -> dict:
     token = os.getenv("GITHUB_TOKEN")
     if not issue_ctx.repo or not token or not issue_ctx.issue_number:
