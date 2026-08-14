@@ -87,7 +87,10 @@ See the full list at [dtctl token-scope docs](https://dynatrace-oss.github.io/dt
 
 ## 6. Set GitHub Actions Permissions
 
-Go to **Settings → Actions → General → Workflow permissions** and select **Read and write permissions**.
+Go to **Settings → Actions → General → Workflow permissions** and make the following changes:
+
+1. Select **Read and write permissions**
+2. Check **Allow GitHub Actions to create and approve pull requests**
 
 This allows the agent workflow to:
 

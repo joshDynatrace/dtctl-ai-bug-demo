@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from outputs.dynatrace_output import post_dynatrace_event
-from outputs.github_output import build_completion_comment, build_start_comment, post_issue_comment
+from outputs.github_output import build_completion_comment, build_start_comment, create_pull_request, post_issue_comment
 from pipeline import run_investigation, summarize_evidence
 from triggers.github_trigger import load_issue_context
 
@@ -69,8 +69,16 @@ def main():
     _persist("evidence_summary.json", evidence_summary)
 
     # ========================================================================
-    # 4. CREATE PR (optional): Validate agent created a PR if AUTO_PR enabled
+    # 4. CREATE PR (optional): Orchestrator creates PR via GitHub API
     # ========================================================================
+    pr_result = {}
+    if auto_pr and fix_plan.branch:
+        pr_result = create_pull_request(issue_ctx, fix_plan)
+        _persist("pr_result.json", pr_result)
+        if pr_result.get("pr_url"):
+            fix_plan.pr_url = pr_result["pr_url"]
+            fix_plan.pr_number = pr_result["pr_number"]
+
     pr_info = _extract_pr_info(fix_plan, auto_pr)
     _persist("pr_info.json", pr_info)
 
