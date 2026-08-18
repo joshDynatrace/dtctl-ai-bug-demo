@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - agent/**
+      - .github/workflows/build-agent-image.yml
   workflow_dispatch:
 
 permissions:
