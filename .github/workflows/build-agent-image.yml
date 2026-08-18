@@ -4,7 +4,8 @@ on:
   push:
     branches: [main]
     paths:
-      - agent/Dockerfile
+      - agent/**
+      - .github/workflows/build-agent-image.yml
   workflow_dispatch:
 
 permissions:
