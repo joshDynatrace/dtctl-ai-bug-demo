@@ -30,7 +30,7 @@ def load_issue_context() -> IssueContext:
 
 def _extract_problem_id(issue_body: str, issue_title: str = "") -> "str | None":
     source = f"{issue_title}\n{issue_body}"
-    for pattern in [r"Problem:\s*(P-\d+)", r"problem\.id\s*[:=]\s*(P-\d+)", r"\b(P-\d{3,})\b"]:
+    for pattern in [r"Problem:[*\s]*(P-\d+)", r"problem\.id\s*[:=]\s*(P-\d+)", r"\b(P-\d{3,})\b"]:
         match = re.search(pattern, source or "", re.IGNORECASE)
         if match:
             return match.group(1).upper()
@@ -39,5 +39,5 @@ def _extract_problem_id(issue_body: str, issue_title: str = "") -> "str | None":
 
 def _extract_event_id(issue_body: str, issue_title: str = "") -> "str | None":
     source = f"{issue_title}\n{issue_body}"
-    match = re.search(r"EventID:\s*(-?\d+_\d+V2)", source or "", re.IGNORECASE)
+    match = re.search(r"EventID:[*\s]*(-?\d+_\d+V2)", source or "", re.IGNORECASE)
     return match.group(1) if match else None
