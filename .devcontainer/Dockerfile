@@ -4,7 +4,6 @@ ARG USERNAME=vscode
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 ARG YQ_VERSION=v4.44.3
-ARG YQ_BINARY=yq_linux_amd64
 
 RUN export DEBIAN_FRONTEND=noninteractive
 
@@ -22,18 +21,22 @@ RUN apt-get update && \
 RUN apt install python3 python3-pip -y
 
 # Install yq
-RUN wget https://github.com/mikefarah/yq/releases/download/$YQ_VERSION/$YQ_BINARY -O /usr/bin/yq && sudo chmod +x /usr/bin/yq
+RUN ARCH=$(dpkg --print-architecture) \
+    && wget https://github.com/mikefarah/yq/releases/download/$YQ_VERSION/yq_linux_${ARCH} -O /usr/bin/yq \
+    && chmod +x /usr/bin/yq
 
 # Install kubectl
-RUN curl -sSL -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl \
+RUN ARCH=$(dpkg --print-architecture) \
+    && curl -sSL -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/${ARCH}/kubectl \
     && chmod +x /usr/local/bin/kubectl
 
 # Install Helm
 RUN curl -s https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash -
 
 # Install kind
-RUN KIND_RELEASE=$(curl --silent "https://api.github.com/repos/kubernetes-sigs/kind/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/') \
-    && curl -sSL -o /usr/local/bin/kind https://kind.sigs.k8s.io/dl/$KIND_RELEASE/kind-linux-amd64 \
+RUN ARCH=$(dpkg --print-architecture) \
+    && KIND_RELEASE=$(curl --silent "https://api.github.com/repos/kubernetes-sigs/kind/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/') \
+    && curl -sSL -o /usr/local/bin/kind https://kind.sigs.k8s.io/dl/$KIND_RELEASE/kind-linux-${ARCH} \
     && chmod +x /usr/local/bin/kind
 
 RUN /tmp/scripts/docker.sh
