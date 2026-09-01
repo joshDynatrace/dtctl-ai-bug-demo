@@ -12,8 +12,9 @@ permissions:
 jobs:
   investigate:
     if: |
-      contains(github.event.issue.title, 'Defect Found') ||
-      contains(join(github.event.issue.labels.*.name, ','), 'dynatrace-problem')
+      (contains(github.event.issue.title, 'Defect Found') ||
+       contains(join(github.event.issue.labels.*.name, ','), 'dynatrace-problem')) &&
+      contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association)
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
